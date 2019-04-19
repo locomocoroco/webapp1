@@ -11,7 +11,7 @@ func home (w http.ResponseWriter,r *http.Request) {
 }
 func contact (w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type","text/html")
-	fmt.Fprint(w, "to get in touch <ahref=\"mailto:lol@loc.com\">NilsW</a>")
+	fmt.Fprint(w, "to get in touch <a href=\"mailto:lol@loc.com\">NilsW</a>")
 }
 func main() {
 	r:=mux.NewRouter()

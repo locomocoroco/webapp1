@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="85fc4e06-ee24-4ddb-bb20-1d1d1316ae3e" name="Default Changelist" comment="step by step">
-      <change afterPath="$PROJECT_DIR$/views/layouts/bootstrap.gohtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/layouts/navbar.gohtml" afterDir="false" />
+    <list default="true" id="85fc4e06-ee24-4ddb-bb20-1d1d1316ae3e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/simple/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/simple/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/contact.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/views/contact.gohtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/home.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/views/home.gohtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layouts/view.go" beforeDir="false" afterPath="$PROJECT_DIR$/views/view.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/view.go" beforeDir="false" afterPath="$PROJECT_DIR$/views/view.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,28 +41,28 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="1024" />
+          <entry key="go" value="1297" />
           <entry key="gohtml" value="227" />
           <entry key="md" value="18" />
-          <entry key="txt" value="13" />
+          <entry key="txt" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="1024" />
+          <entry key="Go" value="1297" />
           <entry key="Go template" value="227" />
-          <entry key="PLAIN_TEXT" value="31" />
+          <entry key="PLAIN_TEXT" value="38" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simple/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="26" column="1" lean-forward="true" selection-start-line="26" selection-start-column="1" selection-end-line="26" selection-end-column="1" />
+            <state relative-caret-position="418">
+              <caret line="19" column="35" selection-start-line="19" selection-start-column="35" selection-end-line="19" selection-end-column="35" />
               <folding>
                 <element signature="e#14#79#0" expanded="true" />
               </folding>
@@ -74,7 +70,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/layouts/navbar.gohtml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="220">
@@ -122,8 +118,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/view.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+            <state relative-caret-position="214">
+              <caret line="31" column="53" selection-start-line="31" selection-start-column="53" selection-end-line="31" selection-end-column="53" />
+              <folding>
+                <element signature="e#15#59#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -159,10 +158,10 @@
         <option value="$PROJECT_DIR$/views/contact.gohtml" />
         <option value="$PROJECT_DIR$/views/home.gohtml" />
         <option value="$PROJECT_DIR$/views/layouts/view.go" />
-        <option value="$PROJECT_DIR$/simple/main.go" />
-        <option value="$PROJECT_DIR$/views/view.go" />
         <option value="$PROJECT_DIR$/views/layouts/bootstrap.gohtml" />
         <option value="$PROJECT_DIR$/views/layouts/navbar.gohtml" />
+        <option value="$PROJECT_DIR$/views/view.go" />
+        <option value="$PROJECT_DIR$/simple/main.go" />
       </list>
     </option>
   </component>
@@ -197,11 +196,6 @@
               <item name="webapp1" type="b2602c69:ProjectViewProjectNode" />
               <item name="webapp1" type="462c0819:PsiDirectoryNode" />
               <item name="simple" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="webapp1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp1" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -268,7 +262,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="step by step" />
-    <option name="LAST_COMMIT_MESSAGE" value="step by step" />
+    <MESSAGE value="cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="cleanup" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/simple/readme2.md">
@@ -312,23 +307,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="26" column="1" lean-forward="true" selection-start-line="26" selection-start-column="1" selection-end-line="26" selection-end-column="1" />
-          <folding>
-            <element signature="e#14#79#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/view.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/layouts/bootstrap.gohtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
@@ -340,6 +318,26 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="10" column="55" selection-start-line="10" selection-start-column="55" selection-end-line="10" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/view.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="31" column="53" selection-start-line="31" selection-start-column="53" selection-end-line="31" selection-end-column="53" />
+          <folding>
+            <element signature="e#15#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="19" column="35" selection-start-line="19" selection-start-column="35" selection-end-line="19" selection-end-column="35" />
+          <folding>
+            <element signature="e#14#79#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

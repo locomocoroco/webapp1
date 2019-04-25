@@ -2,6 +2,7 @@ package views
 
 import (
 	"html/template"
+	"net/http"
 	"path/filepath"
 )
 
@@ -27,6 +28,9 @@ type View struct {
 	Layout   string
 }
 
+func (v *View) Render(w http.ResponseWriter, data interface{}) error {
+	return v.Template.ExecuteTemplate(w, v.Layout, data)
+}
 func layoutFiles() []string {
 	files, err := filepath.Glob(LayoutDir + "*" + TemplareExt)
 	if err != nil {

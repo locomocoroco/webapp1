@@ -3,31 +3,31 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"net/http"
-	"webapp1/views/layouts"
+	"webapp1/views"
 )
 
 var (
-	homeView    *view.View
-	contactView *view.View
+	homeView    *views.View
+	contactView *views.View
 )
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	err := homeView.Template.Execute(w, nil)
+	err := homeView.Template.ExecuteTemplate(w, homeView.Layout,nil)
 	if err != nil {
 		panic(err)
 	}
 }
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	err := contactView.Template.Execute(w, nil)
+	err := contactView.Template.ExecuteTemplate(w,contactView.Layout, nil)
 	if err != nil {
 		panic(err)
 	}
 }
 func main() {
-	homeView = view.NewView("../views/home.gohtml")
-	contactView = view.NewView("../views/contact.gohtml")
+	homeView = views.NewView("bootstrap","../views/home.gohtml")
+	contactView = views.NewView("bootstrap","../views/contact.gohtml")
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", home)

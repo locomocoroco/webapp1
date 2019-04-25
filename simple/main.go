@@ -2,39 +2,35 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"html/template"
 	"net/http"
+	"webapp1/views/layouts"
 )
 
 var (
-	homeTemplate    *template.Template
-	contactTemplate *template.Template
+	homeView    *view.View
+	contactView *view.View
 )
-func home (w http.ResponseWriter,r *http.Request) {
-	w.Header().Set("Content-Type","text/html")
 
-	if err:=homeTemplate.Execute(w,nil); err!=nil {
+func home(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	err := homeView.Template.Execute(w, nil)
+	if err != nil {
 		panic(err)
 	}
 }
-func contact (w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type","text/html")
-	if err:=contactTemplate.Execute(w,nil);err !=nil {
+func contact(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	err := contactView.Template.Execute(w, nil)
+	if err != nil {
 		panic(err)
 	}
 }
 func main() {
-	var err error
-	homeTemplate, err=template.ParseFiles("../views/home.gohtml")
-	if err !=nil {
-		panic(err)
-	}
-	contactTemplate, err=template.ParseFiles("../views/contact.gohtml")
-	if err !=nil {
-		panic(err)
-	}
-	r:=mux.NewRouter()
-	r.HandleFunc("/",home)
+	homeView = view.NewView("../views/home.gohtml")
+	contactView = view.NewView("../views/contact.gohtml")
+
+	r := mux.NewRouter()
+	r.HandleFunc("/", home)
 	r.HandleFunc("/contact", contact)
 	http.ListenAndServe(":3000", r)
 

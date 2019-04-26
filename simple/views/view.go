@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	LayoutDir   string = "../views/layouts/"
+	LayoutDir   string = "views/layouts/"
 	TemplareExt string = ".gohtml"
 )
 

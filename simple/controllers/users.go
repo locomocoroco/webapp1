@@ -1,13 +1,14 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"webapp1/simple/views"
 )
 
 func NewUsers() *Users {
 	return &Users{
-		NewView: views.NewView("bootstrap", "views/users/new.gohtml"),
+		NewView: views.NewView("bootstrap", "users/new"),
 	}
 }
 
@@ -21,9 +22,15 @@ func (u *Users) New(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type NewForm struct {
+	Email    string `schema:"email"`
+	Password string `schema:"password"`
+}
+
 func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseForm(); err != nil {
+	var form NewForm
+	if err := parseForm(r, &form); err != nil {
 		panic(err)
 	}
-
+	fmt.Fprint(w, form)
 }

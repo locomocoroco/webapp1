@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var (
@@ -13,9 +14,10 @@ var (
 
 type Users struct {
 	gorm.Model
-	Name   string
-	Email  string `gorm:"not null;unique_index"`
-	Colour string
+	Name         string
+	Email        string `gorm:"not null;unique_index"`
+	Password     string `gorm:"-"`
+	PasswordHash string `gorm:"not null"`
 }
 
 func (us *UserService) ByID(id uint) (*Users, error) {
@@ -44,6 +46,12 @@ func (us *UserService) Update(user *Users) error {
 	return us.db.Save(user).Error
 }
 func (us *UserService) Create(user *Users) error {
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	user.PasswordHash = string(passwordHash)
+	user.Password = ""
 	return us.db.Create(user).Error
 }
 func (us *UserService) Delete(id uint) error {

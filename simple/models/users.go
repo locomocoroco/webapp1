@@ -7,6 +7,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const userPepperPw = "4jhjj767o1ngl6dq"
+
 var (
 	ErrNotFound  = errors.New("resource not found")
 	ErrInvalidID = errors.New("invalid id given")
@@ -46,7 +48,8 @@ func (us *UserService) Update(user *Users) error {
 	return us.db.Save(user).Error
 }
 func (us *UserService) Create(user *Users) error {
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	pwBytes := []byte(user.Password + userPepperPw)
+	passwordHash, err := bcrypt.GenerateFromPassword(pwBytes, bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}

@@ -80,3 +80,10 @@ func (u *Users) Login(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &cookie)
 	fmt.Fprint(w, user)
 }
+func (u *Users) Cookietest(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("email")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	fmt.Fprint(w, cookie.Value)
+}

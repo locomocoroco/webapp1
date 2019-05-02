@@ -12,6 +12,7 @@ const userPepperPw = "4jhjj767o1ngl6dq"
 var (
 	ErrNotFound  = errors.New("resource not found")
 	ErrInvalidID = errors.New("invalid id given")
+	ErrInvalidPW = errors.New("invalid password provided")
 )
 
 type Users struct {
@@ -35,6 +36,22 @@ func (us *UserService) ByEmail(email string) (*Users, error) {
 	err := first(db, &user)
 	return &user, err
 
+}
+func (us *UserService) Auth(email, password string) (*Users, error) {
+	foundUser, err := us.ByEmail(email)
+	if err != nil {
+		return nil, ErrNotFound
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(foundUser.PasswordHash), []byte(password+userPepperPw))
+	if err != nil {
+		switch err {
+		case bcrypt.ErrMismatchedHashAndPassword:
+			return nil, ErrInvalidPW
+		default:
+			return nil, err
+		}
+	}
+	return foundUser, nil
 }
 
 func first(db *gorm.DB, dst interface{}) error {

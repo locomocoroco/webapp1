@@ -5,9 +5,12 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"golang.org/x/crypto/bcrypt"
+	"webapp1/simple/hash"
+	"webapp1/simple/rand"
 )
 
 const userPepperPw = "4jhjj767o1ngl6dq"
+const hmacSecretKey = "5gfl7lhl76lle7gh"
 
 var (
 	ErrNotFound  = errors.New("resource not found")
@@ -21,6 +24,8 @@ type Users struct {
 	Email        string `gorm:"not null;unique_index"`
 	Password     string `gorm:"-"`
 	PasswordHash string `gorm:"not null"`
+	Remember     string `gorm:"-"`
+	RememberHash string `gorm:"not null;unique_index"`
 }
 
 func (us *UserService) ByID(id uint) (*Users, error) {
@@ -36,6 +41,15 @@ func (us *UserService) ByEmail(email string) (*Users, error) {
 	err := first(db, &user)
 	return &user, err
 
+}
+func (us *UserService) ByRemember(token string) (*Users, error) {
+	var user Users
+	rememberHash := us.hmac.Hash(token)
+	err := first(us.db.Where("remember_hash = ?", rememberHash), &user)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
 func (us *UserService) Auth(email, password string) (*Users, error) {
 	foundUser, err := us.ByEmail(email)
@@ -62,6 +76,9 @@ func first(db *gorm.DB, dst interface{}) error {
 	return err
 }
 func (us *UserService) Update(user *Users) error {
+	if user.Remember != "" {
+		user.RememberHash = us.hmac.Hash(user.Remember)
+	}
 	return us.db.Save(user).Error
 }
 func (us *UserService) Create(user *Users) error {
@@ -72,6 +89,16 @@ func (us *UserService) Create(user *Users) error {
 	}
 	user.PasswordHash = string(passwordHash)
 	user.Password = ""
+	if user.Remember == "" {
+		token, err := rand.RememberToken()
+		if err != nil {
+			return err
+		}
+		user.Remember = token
+	}
+
+	user.RememberHash = us.hmac.Hash(user.Remember)
+
 	return us.db.Create(user).Error
 }
 func (us *UserService) Delete(id uint) error {
@@ -88,9 +115,10 @@ func NewUserService(connectionInfo string) (*UserService, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	hmac := hash.NewHMAC(hmacSecretKey)
 	return &UserService{
-		db: db,
+		db:   db,
+		hmac: hmac,
 	}, nil
 }
 
@@ -112,5 +140,6 @@ func (us *UserService) Close() error {
 }
 
 type UserService struct {
-	db *gorm.DB
+	db   *gorm.DB
+	hmac hash.HMAC
 }

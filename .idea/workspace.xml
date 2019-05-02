@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85fc4e06-ee24-4ddb-bb20-1d1d1316ae3e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/simple/hash/hmac.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/simple/rand/strings.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple/controllers/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/simple/controllers/users.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simple/models/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/simple/models/users.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,51 +42,66 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="1" />
-          <entry key="go" value="15" />
+          <entry key="go" value="19" />
           <entry key="gohtml" value="10" />
           <entry key="md" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="15" />
+          <entry key="Go" value="19" />
           <entry key="Go template" value="10" />
           <entry key="PLAIN_TEXT" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="4804" />
+          <entry key="go" value="5700" />
           <entry key="gohtml" value="822" />
           <entry key="md" value="18" />
-          <entry key="txt" value="114" />
+          <entry key="txt" value="136" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="4804" />
+          <entry key="Go" value="5700" />
           <entry key="Go template" value="822" />
-          <entry key="PLAIN_TEXT" value="132" />
+          <entry key="PLAIN_TEXT" value="154" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/simple/controllers/users.go">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/simple/rand/strings.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="569">
-              <caret line="87" column="23" selection-start-line="87" selection-start-column="23" selection-end-line="87" selection-end-column="23" />
+            <state relative-caret-position="459">
+              <caret line="26" column="5" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
+              <folding>
+                <element signature="e#14#58#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/simple/models/users.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="302">
+              <caret line="92" column="31" lean-forward="true" selection-start-line="92" selection-start-column="31" selection-end-line="92" selection-end-column="31" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simple/models/users.go">
+        <entry file="file://$PROJECT_DIR$/simple/hash/hmac.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1056">
-              <caret line="53" column="24" selection-start-line="53" selection-start-column="24" selection-end-line="53" selection-end-column="24" />
+            <state relative-caret-position="418">
+              <caret line="19" column="14" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="14" />
+              <folding>
+                <element signature="e#14#47#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -122,10 +139,12 @@
         <option value="$PROJECT_DIR$/simple/exp/main.go" />
         <option value="$PROJECT_DIR$/simple/views/users/new.gohtml" />
         <option value="$PROJECT_DIR$/simple/views/users/login.gohtml" />
-        <option value="$PROJECT_DIR$/simple/main.go" />
         <option value="$PROJECT_DIR$/simple/views/layouts/navbar.gohtml" />
-        <option value="$PROJECT_DIR$/simple/models/users.go" />
+        <option value="$PROJECT_DIR$/simple/main.go" />
         <option value="$PROJECT_DIR$/simple/controllers/users.go" />
+        <option value="$PROJECT_DIR$/simple/hash/hmac.go" />
+        <option value="$PROJECT_DIR$/simple/rand/strings.go" />
+        <option value="$PROJECT_DIR$/simple/models/users.go" />
       </list>
     </option>
   </component>
@@ -165,33 +184,7 @@
               <item name="webapp1" type="b2602c69:ProjectViewProjectNode" />
               <item name="webapp1" type="462c0819:PsiDirectoryNode" />
               <item name="simple" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="webapp1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp1" type="462c0819:PsiDirectoryNode" />
-              <item name="simple" type="462c0819:PsiDirectoryNode" />
               <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="webapp1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp1" type="462c0819:PsiDirectoryNode" />
-              <item name="simple" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="webapp1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp1" type="462c0819:PsiDirectoryNode" />
-              <item name="simple" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="layouts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="webapp1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp1" type="462c0819:PsiDirectoryNode" />
-              <item name="simple" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="users" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -308,7 +301,9 @@
     <MESSAGE value="Login page" />
     <MESSAGE value="authenticate added" />
     <MESSAGE value="Cookie added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cookie added" />
+    <MESSAGE value="Cookie added-&gt;cookietest" />
+    <MESSAGE value="redirect-&gt;cookietest" />
+    <option name="LAST_COMMIT_MESSAGE" value="redirect-&gt;cookietest" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/simple/readme2.md">
@@ -401,13 +396,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="37" column="54" selection-start-line="37" selection-start-column="54" selection-end-line="37" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/simple/views/users/new.gohtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="434">
@@ -417,15 +405,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simple/controllers/users.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="569">
-          <caret line="87" column="23" selection-start-line="87" selection-start-column="23" selection-end-line="87" selection-end-column="23" />
+        <state relative-caret-position="396">
+          <caret line="23" column="41" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple/hash/hmac.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="19" column="14" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="14" />
+          <folding>
+            <element signature="e#14#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple/rand/strings.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="26" column="5" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
+          <folding>
+            <element signature="e#14#58#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/simple/models/users.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1056">
-          <caret line="53" column="24" selection-start-line="53" selection-start-column="24" selection-end-line="53" selection-end-column="24" />
+        <state relative-caret-position="302">
+          <caret line="92" column="31" lean-forward="true" selection-start-line="92" selection-start-column="31" selection-end-line="92" selection-end-column="31" />
         </state>
       </provider>
     </entry>

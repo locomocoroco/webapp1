@@ -12,6 +12,21 @@ import (
 const userPepperPw = "4jhjj767o1ngl6dq"
 const hmacSecretKey = "5gfl7lhl76lle7gh"
 
+type UserDB interface {
+	ByID(id uint) (*Users, error)
+	ByEmail(email string) (*Users, error)
+	ByRemember(token string) (*Users, error)
+
+	Create(user *Users) error
+	Update(user *Users) error
+	Delete(id uint) error
+
+	Close() error
+
+	AutoMigrate() error
+	DestructiveReset() error
+}
+
 var (
 	ErrNotFound  = errors.New("resource not found")
 	ErrInvalidID = errors.New("invalid id given")
@@ -28,24 +43,24 @@ type Users struct {
 	RememberHash string `gorm:"not null;unique_index"`
 }
 
-func (us *UserService) ByID(id uint) (*Users, error) {
+func (ug *userGorm) ByID(id uint) (*Users, error) {
 	var user Users
-	db := us.db.Where("id = ?", id)
+	db := ug.db.Where("id = ?", id)
 	err := first(db, &user)
 	return &user, err
 }
 
-func (us *UserService) ByEmail(email string) (*Users, error) {
+func (ug *userGorm) ByEmail(email string) (*Users, error) {
 	var user Users
-	db := us.db.Where("email = ?", email)
+	db := ug.db.Where("email = ?", email)
 	err := first(db, &user)
 	return &user, err
 
 }
-func (us *UserService) ByRemember(token string) (*Users, error) {
+func (ug *userGorm) ByRemember(token string) (*Users, error) {
 	var user Users
-	rememberHash := us.hmac.Hash(token)
-	err := first(us.db.Where("remember_hash = ?", rememberHash), &user)
+	rememberHash := ug.hmac.Hash(token)
+	err := first(ug.db.Where("remember_hash = ?", rememberHash), &user)
 	if err != nil {
 		return nil, err
 	}
@@ -75,13 +90,13 @@ func first(db *gorm.DB, dst interface{}) error {
 	}
 	return err
 }
-func (us *UserService) Update(user *Users) error {
+func (ug *userGorm) Update(user *Users) error {
 	if user.Remember != "" {
-		user.RememberHash = us.hmac.Hash(user.Remember)
+		user.RememberHash = ug.hmac.Hash(user.Remember)
 	}
-	return us.db.Save(user).Error
+	return ug.db.Save(user).Error
 }
-func (us *UserService) Create(user *Users) error {
+func (ug *userGorm) Create(user *Users) error {
 	pwBytes := []byte(user.Password + userPepperPw)
 	passwordHash, err := bcrypt.GenerateFromPassword(pwBytes, bcrypt.DefaultCost)
 	if err != nil {
@@ -97,49 +112,70 @@ func (us *UserService) Create(user *Users) error {
 		user.Remember = token
 	}
 
-	user.RememberHash = us.hmac.Hash(user.Remember)
+	user.RememberHash = ug.hmac.Hash(user.Remember)
 
-	return us.db.Create(user).Error
+	return ug.db.Create(user).Error
 }
-func (us *UserService) Delete(id uint) error {
+func (ug *userGorm) Delete(id uint) error {
 	if id == 0 {
 		return ErrInvalidID
 	}
 	user := Users{Model: gorm.Model{ID: id}}
-	return us.db.Delete(&user).Error
+	return ug.db.Delete(&user).Error
 }
 
 //NewUserService
 func NewUserService(connectionInfo string) (*UserService, error) {
+	ug, err := newUserGorm(connectionInfo)
+	if err != nil {
+		return nil, err
+	}
+	return &UserService{
+		UserDB: &userValidator{
+			UserDB: ug,
+		},
+	}, nil
+}
+
+//Closes db conn
+func (ug *userGorm) DestructiveReset() error {
+	if err := ug.db.DropTableIfExists(&Users{}).Error; err != nil {
+		return err
+	}
+	return ug.AutoMigrate()
+}
+func (ug *userGorm) AutoMigrate() error {
+	if err := ug.db.AutoMigrate(&Users{}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (ug *userGorm) Close() error {
+	return ug.db.Close()
+}
+
+type UserService struct {
+	UserDB
+}
+type userValidator struct {
+	UserDB
+}
+
+func newUserGorm(connectionInfo string) (*userGorm, error) {
 	db, err := gorm.Open("postgres", connectionInfo)
 	if err != nil {
 		return nil, err
 	}
 	hmac := hash.NewHMAC(hmacSecretKey)
-	return &UserService{
+	return &userGorm{
 		db:   db,
 		hmac: hmac,
 	}, nil
 }
 
-//Closes db conn
-func (us *UserService) DestructiveReset() error {
-	if err := us.db.DropTableIfExists(&Users{}).Error; err != nil {
-		return err
-	}
-	return us.AutoMigrate()
-}
-func (us *UserService) AutoMigrate() error {
-	if err := us.db.AutoMigrate(&Users{}).Error; err != nil {
-		return err
-	}
-	return nil
-}
-func (us *UserService) Close() error {
-	return us.db.Close()
-}
+var _ UserDB = &userGorm{}
 
-type UserService struct {
+type userGorm struct {
 	db   *gorm.DB
 	hmac hash.HMAC
 }

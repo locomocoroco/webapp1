@@ -26,6 +26,10 @@ type UserDB interface {
 	AutoMigrate() error
 	DestructiveReset() error
 }
+type UserService interface {
+	Auth(email, password string) (*Users, error)
+	UserDB
+}
 
 var (
 	ErrNotFound  = errors.New("resource not found")
@@ -66,7 +70,7 @@ func (ug *userGorm) ByRemember(token string) (*Users, error) {
 	}
 	return &user, nil
 }
-func (us *UserService) Auth(email, password string) (*Users, error) {
+func (us *userService) Auth(email, password string) (*Users, error) {
 	foundUser, err := us.ByEmail(email)
 	if err != nil {
 		return nil, ErrNotFound
@@ -125,12 +129,12 @@ func (ug *userGorm) Delete(id uint) error {
 }
 
 //NewUserService
-func NewUserService(connectionInfo string) (*UserService, error) {
+func NewUserService(connectionInfo string) (UserService, error) {
 	ug, err := newUserGorm(connectionInfo)
 	if err != nil {
 		return nil, err
 	}
-	return &UserService{
+	return &userService{
 		UserDB: &userValidator{
 			UserDB: ug,
 		},
@@ -154,9 +158,14 @@ func (ug *userGorm) Close() error {
 	return ug.db.Close()
 }
 
-type UserService struct {
+var _ UserService = &userService{}
+
+type userService struct {
 	UserDB
 }
+
+var _ UserDB = &userValidator{}
+
 type userValidator struct {
 	UserDB
 }

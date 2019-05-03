@@ -8,7 +8,7 @@ import (
 	"webapp1/simple/views"
 )
 
-func NewUsers(us *models.UserService) *Users {
+func NewUsers(us models.UserService) *Users {
 	return &Users{
 		NewView:   views.NewView("bootstrap", "users/new"),
 		LoginView: views.NewView("bootstrap", "users/login"),
@@ -19,7 +19,7 @@ func NewUsers(us *models.UserService) *Users {
 type Users struct {
 	NewView   *views.View
 	LoginView *views.View
-	us        *models.UserService
+	us        models.UserService
 }
 
 func (u *Users) New(w http.ResponseWriter, r *http.Request) {

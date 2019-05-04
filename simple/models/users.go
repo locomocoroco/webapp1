@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"golang.org/x/crypto/bcrypt"
+	"strings"
 	"webapp1/simple/hash"
 	"webapp1/simple/rand"
 )
@@ -153,6 +154,16 @@ type userValidator struct {
 	hmac hash.HMAC
 }
 
+func (uv *userValidator) ByEmail(email string) (*Users, error) {
+	user := Users{
+		Email: email,
+	}
+	if err := runUserValFuncs(&user, uv.normalizeEmail); err != nil {
+		return nil, err
+	}
+	return uv.UserDB.ByEmail(user.Email)
+}
+
 func (uv *userValidator) ByRemember(token string) (*Users, error) {
 	user := Users{
 		Remember: token,
@@ -164,7 +175,7 @@ func (uv *userValidator) ByRemember(token string) (*Users, error) {
 	return uv.UserDB.ByRemember(user.RememberHash)
 }
 func (uv *userValidator) Create(user *Users) error {
-	if err := runUserValFuncs(user, uv.bcryptPassword, uv.setRememberIfUnset, uv.hmacRemember); err != nil {
+	if err := runUserValFuncs(user, uv.bcryptPassword, uv.setRememberIfUnset, uv.hmacRemember, uv.normalizeEmail); err != nil {
 		return err
 	}
 	return uv.UserDB.Create(user)
@@ -212,15 +223,31 @@ func (uv *userValidator) setRememberIfUnset(user *Users) error {
 	user.Remember = token
 	return nil
 }
+func (uv *userValidator) idGreaterThan(n uint) userValFunc {
+	return userValFunc(func(user *Users) error {
+		if user.ID <= 0 {
+			return ErrInvalidID
+		}
+		return nil
+	})
+
+}
+func (uv *userValidator) normalizeEmail(user *Users) error {
+	user.Email = strings.ToLower(strings.TrimSpace(user.Email))
+
+	return nil
+}
 func (uv *userValidator) Update(user *Users) error {
-	if err := runUserValFuncs(user, uv.bcryptPassword, uv.hmacRemember); err != nil {
+	if err := runUserValFuncs(user, uv.bcryptPassword, uv.hmacRemember, uv.normalizeEmail); err != nil {
 		return err
 	}
 	return uv.UserDB.Update(user)
 }
 func (uv *userValidator) Delete(id uint) error {
-	if id == 0 {
-		return ErrInvalidID
+	var user Users
+	user.ID = id
+	if err := runUserValFuncs(&user, uv.idGreaterThan(0)); err != nil {
+		return err
 	}
 	return uv.UserDB.Delete(id)
 }

@@ -175,7 +175,8 @@ func (uv *userValidator) ByRemember(token string) (*Users, error) {
 	return uv.UserDB.ByRemember(user.RememberHash)
 }
 func (uv *userValidator) Create(user *Users) error {
-	if err := runUserValFuncs(user, uv.bcryptPassword, uv.setRememberIfUnset, uv.hmacRemember, uv.normalizeEmail); err != nil {
+	if err := runUserValFuncs(user, uv.bcryptPassword, uv.setRememberIfUnset,
+		uv.hmacRemember, uv.normalizeEmail, uv.requireEmail); err != nil {
 		return err
 	}
 	return uv.UserDB.Create(user)
@@ -237,8 +238,15 @@ func (uv *userValidator) normalizeEmail(user *Users) error {
 
 	return nil
 }
+func (uv *userValidator) requireEmail(user *Users) error {
+	if user.Email == "" {
+		return errors.New("email is required")
+	}
+	return nil
+}
 func (uv *userValidator) Update(user *Users) error {
-	if err := runUserValFuncs(user, uv.bcryptPassword, uv.hmacRemember, uv.normalizeEmail); err != nil {
+	if err := runUserValFuncs(user, uv.bcryptPassword, uv.hmacRemember,
+		uv.normalizeEmail, uv.requireEmail); err != nil {
 		return err
 	}
 	return uv.UserDB.Update(user)

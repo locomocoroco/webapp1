@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"golang.org/x/crypto/bcrypt"
+	"regexp"
 	"strings"
 	"webapp1/simple/hash"
 	"webapp1/simple/rand"
@@ -37,6 +38,7 @@ var (
 	ErrInvalidID = errors.New("invalid id given")
 	ErrInvalidPW = errors.New("invalid password provided")
 )
+var emailRegex = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,16}$`)
 
 type Users struct {
 	gorm.Model
@@ -176,7 +178,7 @@ func (uv *userValidator) ByRemember(token string) (*Users, error) {
 }
 func (uv *userValidator) Create(user *Users) error {
 	if err := runUserValFuncs(user, uv.bcryptPassword, uv.setRememberIfUnset,
-		uv.hmacRemember, uv.normalizeEmail, uv.requireEmail); err != nil {
+		uv.hmacRemember, uv.normalizeEmail, uv.requireEmail, uv.emailFormat, uv.emailIsAvail); err != nil {
 		return err
 	}
 	return uv.UserDB.Create(user)
@@ -244,9 +246,31 @@ func (uv *userValidator) requireEmail(user *Users) error {
 	}
 	return nil
 }
+func (uv *userValidator) emailFormat(user *Users) error {
+	if user.Email == "" {
+		return nil
+	}
+	if !emailRegex.MatchString(user.Email) {
+		return errors.New("email is not valid")
+	}
+	return nil
+}
+func (uv *userValidator) emailIsAvail(user *Users) error {
+	existing, err := uv.ByEmail(user.Email)
+	if err == ErrNotFound {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	if user.ID != existing.ID {
+		return errors.New("email is already taken")
+	}
+	return nil
+}
 func (uv *userValidator) Update(user *Users) error {
 	if err := runUserValFuncs(user, uv.bcryptPassword, uv.hmacRemember,
-		uv.normalizeEmail, uv.requireEmail); err != nil {
+		uv.normalizeEmail, uv.requireEmail, uv.emailFormat, uv.emailIsAvail); err != nil {
 		return err
 	}
 	return uv.UserDB.Update(user)

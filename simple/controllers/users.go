@@ -29,9 +29,7 @@ func (u *Users) New(w http.ResponseWriter, r *http.Request) {
 		Alert: &views.Alert{Level: views.AlertSuccess, Message: "You did it champ"},
 		Yield: "",
 	}
-	if err := u.NewView.Render(w, d); err != nil {
-		panic(err)
-	}
+	u.NewView.Render(w, d)
 }
 
 type NewForm struct {

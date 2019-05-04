@@ -45,10 +45,7 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 	var form NewForm
 	if err := parseForm(r, &form); err != nil {
 		log.Println(err)
-		vd.Alert = &views.Alert{
-			Level:   views.AlertError,
-			Message: views.ErrGeneric,
-		}
+		vd.SetAlert(err)
 		u.NewView.Render(w, vd)
 		return
 	}
@@ -59,10 +56,7 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := u.us.Create(&user); err != nil {
 		log.Println(err)
-		vd.Alert = &views.Alert{
-			Level:   views.AlertError,
-			Message: err.Error(),
-		}
+		vd.SetAlert(err)
 		u.NewView.Render(w, vd)
 		return
 	}
@@ -80,26 +74,30 @@ type LoginForm struct {
 }
 
 func (u *Users) Login(w http.ResponseWriter, r *http.Request) {
+	var vd views.Data
 	var form LoginForm
 	if err := parseForm(r, &form); err != nil {
-		panic(err)
+		log.Println(err)
+		vd.SetAlert(err)
+		u.LoginView.Render(w, vd)
+		return
 	}
 	user, err := u.us.Auth(form.Email, form.Password)
 	if err != nil {
 		switch err {
-		case models.ErrInvalidPW:
-			fmt.Fprint(w, "Invalid password provided")
 		case models.ErrNotFound:
-			fmt.Fprint(w, "Invalid email provided")
+			vd.AlertError("Invalid email provided")
 		default:
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			vd.SetAlert(err)
 
 		}
+		u.LoginView.Render(w, vd)
 		return
 	}
 	err = u.signIn(w, user)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		vd.SetAlert(err)
+		u.LoginView.Render(w, vd)
 		return
 	}
 

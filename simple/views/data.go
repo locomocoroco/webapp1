@@ -17,3 +17,28 @@ type Data struct {
 	Alert *Alert
 	Yield interface{}
 }
+
+func (d *Data) SetAlert(err error) {
+	if pErr, ok := err.(PublicError); ok {
+		d.Alert = &Alert{
+			Level:   AlertError,
+			Message: pErr.Puclic(),
+		}
+	} else {
+		d.Alert = &Alert{
+			Level:   AlertError,
+			Message: ErrGeneric,
+		}
+	}
+}
+func (d *Data) AlertError(msg string) {
+	d.Alert = &Alert{
+		Level:   AlertError,
+		Message: msg,
+	}
+}
+
+type PublicError interface {
+	error
+	Puclic() string
+}

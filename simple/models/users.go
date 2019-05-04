@@ -1,7 +1,6 @@
 package models
 
 import (
-	"errors"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"golang.org/x/crypto/bcrypt"
@@ -33,13 +32,6 @@ type UserService interface {
 	UserDB
 }
 
-var (
-	ErrNotFound  = errors.New("resource not found")
-	ErrInvalidID = errors.New("invalid id given")
-	ErrInvalidPW = errors.New("invalid password provided")
-	ErrPWShort   = errors.New("pw needs to be eight characters long")
-	ErrPWrequire = errors.New("pw needs to be set")
-)
 var emailRegex = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,16}$`)
 
 type Users struct {
@@ -78,13 +70,13 @@ func (ug *userGorm) ByRemember(rememberHash string) (*Users, error) {
 func (us *userService) Auth(email, password string) (*Users, error) {
 	foundUser, err := us.ByEmail(email)
 	if err != nil {
-		return nil, ErrNotFound
+		return nil, err
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(foundUser.PasswordHash), []byte(password+userPepperPw))
 	if err != nil {
 		switch err {
 		case bcrypt.ErrMismatchedHashAndPassword:
-			return nil, ErrInvalidPW
+			return nil, ErrPasswordIncorrect
 		default:
 			return nil, err
 		}
@@ -225,19 +217,19 @@ func (uv *userValidator) lengthPassword(user *Users) error {
 		return nil
 	}
 	if len(user.Password) < 8 {
-		return ErrPWShort
+		return ErrPasswordTooShort
 	}
 	return nil
 }
 func (uv *userValidator) requirePassword(user *Users) error {
 	if user.Password == "" {
-		return ErrPWrequire
+		return ErrPasswordRequired
 	}
 	return nil
 }
 func (uv *userValidator) requirePasswordHash(user *Users) error {
 	if user.PasswordHash == "" {
-		return ErrPWrequire
+		return ErrPasswordRequired
 	}
 	return nil
 }
@@ -268,20 +260,20 @@ func (uv *userValidator) rememberMinBytes(user *Users) error {
 		return err
 	}
 	if n < 32 {
-		return errors.New("remember token must be at least 32 bytes")
+		return ErrRememberTooShort
 	}
 	return nil
 }
 func (uv *userValidator) requireRememberHash(user *Users) error {
 	if user.RememberHash == "" {
-		return errors.New("rememberHash required")
+		return ErrRememberRequired
 	}
 	return nil
 }
 func (uv *userValidator) idGreaterThan(n uint) userValFunc {
 	return userValFunc(func(user *Users) error {
 		if user.ID <= 0 {
-			return ErrInvalidID
+			return ErrIDInvalid
 		}
 		return nil
 	})
@@ -294,7 +286,7 @@ func (uv *userValidator) normalizeEmail(user *Users) error {
 }
 func (uv *userValidator) requireEmail(user *Users) error {
 	if user.Email == "" {
-		return errors.New("email is required")
+		return ErrEmailRequired
 	}
 	return nil
 }
@@ -303,7 +295,7 @@ func (uv *userValidator) emailFormat(user *Users) error {
 		return nil
 	}
 	if !emailRegex.MatchString(user.Email) {
-		return errors.New("email is not valid")
+		return ErrEmailInvalid
 	}
 	return nil
 }
@@ -316,7 +308,7 @@ func (uv *userValidator) emailIsAvail(user *Users) error {
 		return err
 	}
 	if user.ID != existing.ID {
-		return errors.New("email is already taken")
+		return ErrEmailTaken
 	}
 	return nil
 }

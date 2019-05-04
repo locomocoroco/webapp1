@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="85fc4e06-ee24-4ddb-bb20-1d1d1316ae3e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/simple/views/data.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple/views/layouts/alert.gohtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple/controllers/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/simple/controllers/users.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple/views/layouts/bootstrap.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/simple/views/layouts/bootstrap.gohtml" afterDir="false" />
-    </list>
+    <list default="true" id="85fc4e06-ee24-4ddb-bb20-1d1d1316ae3e" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +26,7 @@
     <session id="1147004613">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="11" />
+          <entry key="project.closed" value="12" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.4" value="4" />
           <entry key="project.open.time.5" value="3" />
@@ -43,87 +37,60 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="1" />
-          <entry key="go" value="25" />
+          <entry key="go" value="28" />
           <entry key="gohtml" value="12" />
           <entry key="md" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="25" />
+          <entry key="Go" value="28" />
           <entry key="Go template" value="12" />
           <entry key="PLAIN_TEXT" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="8335" />
+          <entry key="go" value="8678" />
           <entry key="gohtml" value="897" />
           <entry key="md" value="18" />
-          <entry key="txt" value="371" />
+          <entry key="txt" value="394" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="8335" />
+          <entry key="Go" value="8678" />
           <entry key="Go template" value="897" />
-          <entry key="PLAIN_TEXT" value="389" />
+          <entry key="PLAIN_TEXT" value="412" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simple/controllers/users.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="63" column="32" selection-start-line="63" selection-start-column="32" selection-end-line="63" selection-end-column="32" />
+            <state relative-caret-position="1031">
+              <caret line="88" column="51" selection-start-line="88" selection-start-column="51" selection-end-line="88" selection-end-column="51" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/simple/models/errors.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="525">
+              <caret line="58" selection-start-line="58" selection-end-line="58" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simple/views/data.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="8" column="70" selection-start-line="8" selection-start-column="70" selection-end-line="8" selection-end-column="70" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simple/models/users.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="205" column="5" lean-forward="true" selection-start-line="205" selection-start-column="5" selection-end-line="205" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simple/views/layouts/alert.gohtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="1" column="32" selection-start-line="1" selection-start-column="32" selection-end-line="1" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simple/views/layouts/bootstrap.gohtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="14" column="25" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simple/rand/strings.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="21" column="20" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+            <state relative-caret-position="704">
+              <caret line="35" column="19" selection-start-line="35" selection-start-column="19" selection-end-line="35" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -164,11 +131,12 @@
         <option value="$PROJECT_DIR$/simple/main.go" />
         <option value="$PROJECT_DIR$/simple/hash/hmac.go" />
         <option value="$PROJECT_DIR$/simple/rand/strings.go" />
-        <option value="$PROJECT_DIR$/simple/models/users.go" />
         <option value="$PROJECT_DIR$/simple/views/layouts/alert.gohtml" />
         <option value="$PROJECT_DIR$/simple/views/layouts/bootstrap.gohtml" />
+        <option value="$PROJECT_DIR$/simple/models/users.go" />
         <option value="$PROJECT_DIR$/simple/views/data.go" />
         <option value="$PROJECT_DIR$/simple/controllers/users.go" />
+        <option value="$PROJECT_DIR$/simple/models/errors.go" />
       </list>
     </option>
   </component>
@@ -179,10 +147,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1903" />
-    <option name="y" value="363" />
-    <option name="width" value="1939" />
-    <option name="height" value="1049" />
+    <option name="x" value="475" />
+    <option name="y" value="226" />
+    <option name="width" value="1552" />
+    <option name="height" value="840" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -221,20 +189,7 @@
               <item name="webapp1" type="b2602c69:ProjectViewProjectNode" />
               <item name="webapp1" type="462c0819:PsiDirectoryNode" />
               <item name="simple" type="462c0819:PsiDirectoryNode" />
-              <item name="rand" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="webapp1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp1" type="462c0819:PsiDirectoryNode" />
-              <item name="simple" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="webapp1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="webapp1" type="462c0819:PsiDirectoryNode" />
-              <item name="simple" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="layouts" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -274,10 +229,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1927" y="343" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4989429" visible="true" weight="0.110067114" />
-      <window_info id="Structure" order="1" sideWeight="0.5010571" side_tool="true" weight="0.10939597" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49619773" weight="0.110067114" />
+      <window_info id="Structure" order="1" sideWeight="0.5038023" side_tool="true" visible="true" weight="0.110067114" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
@@ -288,9 +242,9 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32907802" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.4986577" visible="true" weight="0.2539007" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5013423" side_tool="true" weight="0.2539007" />
-      <window_info active="true" anchor="bottom" id="Messages" order="11" sideWeight="0.49960256" visible="true" weight="0.32839313" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4986577" weight="0.2539007" />
+      <window_info active="true" anchor="bottom" id="Event Log" order="10" sideWeight="0.5013423" side_tool="true" visible="true" weight="0.2539007" />
+      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.49960256" weight="0.32839313" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -362,7 +316,8 @@
     <MESSAGE value="require Email added" />
     <MESSAGE value="additional email validation added" />
     <MESSAGE value="remember token validation added" />
-    <option name="LAST_COMMIT_MESSAGE" value="remember token validation added" />
+    <MESSAGE value="error handling frontend" />
+    <option name="LAST_COMMIT_MESSAGE" value="error handling frontend" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/simple/readme2.md">
@@ -476,13 +431,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple/models/users.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="205" column="5" lean-forward="true" selection-start-line="205" selection-start-column="5" selection-end-line="205" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/simple/views/layouts/bootstrap.gohtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
@@ -497,17 +445,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple/views/data.go">
+    <entry file="file://$PROJECT_DIR$/simple/models/users.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="70" selection-start-line="8" selection-start-column="70" selection-end-line="8" selection-end-column="70" />
+        <state relative-caret-position="437">
+          <caret line="310" column="28" selection-start-line="310" selection-start-column="28" selection-end-line="310" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/simple/controllers/users.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="63" column="32" selection-start-line="63" selection-start-column="32" selection-end-line="63" selection-end-column="32" />
+        <state relative-caret-position="1031">
+          <caret line="88" column="51" selection-start-line="88" selection-start-column="51" selection-end-line="88" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple/models/errors.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="58" selection-start-line="58" selection-end-line="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple/views/data.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="704">
+          <caret line="35" column="19" selection-start-line="35" selection-start-column="19" selection-end-line="35" selection-end-column="19" />
         </state>
       </provider>
     </entry>

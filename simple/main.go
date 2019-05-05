@@ -37,6 +37,10 @@ func main() {
 	r.Handle("/login", usersC.LoginView).Methods("GET")
 	r.HandleFunc("/login", usersC.Login).Methods("POST")
 	r.HandleFunc("/cookietest", usersC.Cookietest).Methods("GET")
+
+	galleriesC := controllers.NewGalleries(services.Gallery)
+	r.Handle("/galleries/new", galleriesC.New).Methods("GET")
+
 	http.ListenAndServe(":3000", r)
 
 }

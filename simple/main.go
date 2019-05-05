@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"webapp1/simple/controllers"
+	"webapp1/simple/middleware"
 	"webapp1/simple/models"
 )
 
@@ -17,8 +18,6 @@ const (
 )
 
 func main() {
-	staticC := controllers.NewStatic()
-
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 	services, err := models.NewServices(psqlInfo)
@@ -28,7 +27,14 @@ func main() {
 	defer services.Close()
 	services.AutoMigrate()
 
+	requreUserMw := middleware.RequireUser{
+		UserService: services.User,
+	}
+
+	galleriesC := controllers.NewGalleries(services.Gallery)
 	usersC := controllers.NewUsers(services.User)
+	staticC := controllers.NewStatic()
+
 	r := mux.NewRouter()
 	r.Handle("/", staticC.HomeView).Methods("GET")
 	r.Handle("/contact", staticC.ContactView).Methods("GET")
@@ -38,9 +44,8 @@ func main() {
 	r.HandleFunc("/login", usersC.Login).Methods("POST")
 	r.HandleFunc("/cookietest", usersC.Cookietest).Methods("GET")
 
-	galleriesC := controllers.NewGalleries(services.Gallery)
-	r.Handle("/galleries/new", galleriesC.New).Methods("GET")
-	r.HandleFunc("/galleries", galleriesC.Create).Methods("POST")
+	r.Handle("/galleries/new", requreUserMw.Apply(galleriesC.New)).Methods("GET")
+	r.HandleFunc("/galleries", requreUserMw.ApplyFn(galleriesC.Create)).Methods("POST")
 
 	http.ListenAndServe(":3000", r)
 

@@ -21,11 +21,6 @@ type UserDB interface {
 	Create(user *Users) error
 	Update(user *Users) error
 	Delete(id uint) error
-
-	Close() error
-
-	AutoMigrate() error
-	DestructiveReset() error
 }
 type UserService interface {
 	Auth(email, password string) (*Users, error)
@@ -103,11 +98,8 @@ func (ug *userGorm) Delete(id uint) error {
 }
 
 //NewUserService
-func NewUserService(connectionInfo string) (UserService, error) {
-	ug, err := newUserGorm(connectionInfo)
-	if err != nil {
-		return nil, err
-	}
+func NewUserService(db *gorm.DB) UserService {
+	ug := &userGorm{db}
 	hmac := hash.NewHMAC(hmacSecretKey)
 	uv := &userValidator{
 		hmac:   hmac,
@@ -117,24 +109,7 @@ func NewUserService(connectionInfo string) (UserService, error) {
 		UserDB: &userValidator{
 			UserDB: uv,
 		},
-	}, nil
-}
-
-//Closes db conn
-func (ug *userGorm) DestructiveReset() error {
-	if err := ug.db.DropTableIfExists(&Users{}).Error; err != nil {
-		return err
 	}
-	return ug.AutoMigrate()
-}
-func (ug *userGorm) AutoMigrate() error {
-	if err := ug.db.AutoMigrate(&Users{}).Error; err != nil {
-		return err
-	}
-	return nil
-}
-func (ug *userGorm) Close() error {
-	return ug.db.Close()
 }
 
 var _ UserService = &userService{}

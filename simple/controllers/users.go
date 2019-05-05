@@ -24,12 +24,7 @@ type Users struct {
 }
 
 func (u *Users) New(w http.ResponseWriter, r *http.Request) {
-
-	d := views.Data{
-		Alert: &views.Alert{Level: views.AlertSuccess, Message: "You did it champ"},
-		Yield: "",
-	}
-	u.NewView.Render(w, d)
+	u.NewView.Render(w, nil)
 }
 
 type NewForm struct {

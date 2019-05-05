@@ -40,6 +40,7 @@ func main() {
 
 	galleriesC := controllers.NewGalleries(services.Gallery)
 	r.Handle("/galleries/new", galleriesC.New).Methods("GET")
+	r.HandleFunc("/galleries", galleriesC.Create).Methods("POST")
 
 	http.ListenAndServe(":3000", r)
 

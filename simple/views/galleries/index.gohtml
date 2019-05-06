@@ -1,0 +1,24 @@
+{{define "yield"}}
+<div class="row">
+    <div class="col-md-12">
+        {{range .}}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{.Title}}</h5>
+                    <a href="/galleries/{{.ID}}" class="btn btn-primary">
+                        View
+                    </a>
+                    <a href="/galleries/{{.ID}}/edit" class="btn btn-primary">
+                        Edit
+                    </a>
+
+                </div>
+            </div>
+        {{end}}
+        <a href="galleries/new" class="btn btm-primary">
+            New Gallery
+        </a>
+    </div>
+</div>
+
+{{end}}

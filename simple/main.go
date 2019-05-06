@@ -31,11 +31,11 @@ func main() {
 		UserService: services.User,
 	}
 
-	galleriesC := controllers.NewGalleries(services.Gallery)
+	r := mux.NewRouter()
+	galleriesC := controllers.NewGalleries(services.Gallery, r)
 	usersC := controllers.NewUsers(services.User)
 	staticC := controllers.NewStatic()
 
-	r := mux.NewRouter()
 	r.Handle("/", staticC.HomeView).Methods("GET")
 	r.Handle("/contact", staticC.ContactView).Methods("GET")
 	r.HandleFunc("/signup", usersC.New).Methods("GET")
@@ -46,7 +46,7 @@ func main() {
 
 	r.Handle("/galleries/new", requreUserMw.Apply(galleriesC.New)).Methods("GET")
 	r.HandleFunc("/galleries", requreUserMw.ApplyFn(galleriesC.Create)).Methods("POST")
-
+	r.HandleFunc("/galleries/{id:[0-9]+}", galleriesC.Show).Methods("GET").Name("show_gallery")
 	http.ListenAndServe(":3000", r)
 
 }

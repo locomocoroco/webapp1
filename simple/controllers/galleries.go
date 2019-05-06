@@ -107,7 +107,7 @@ func (g *Galleries) Create(w http.ResponseWriter, r *http.Request) {
 		g.New.Render(w, vd)
 		return
 	}
-	url, err := g.r.Get("show_gallery").URL("id", fmt.Sprintln("%v", gallery.ID))
+	url, err := g.r.Get("show_gallery").URL("id", fmt.Sprintf("%v", gallery.ID))
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return

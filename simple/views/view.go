@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 	"path/filepath"
 	"webapp1/simple/context"
@@ -52,6 +53,7 @@ func (v *View) Render(w http.ResponseWriter, r *http.Request, data interface{}) 
 	vd.User = context.User(r.Context())
 	var buf bytes.Buffer
 	if err := v.Template.ExecuteTemplate(&buf, v.Layout, data); err != nil {
+		log.Println(err)
 		http.Error(w, "oops something went wrong try again!", http.StatusInternalServerError)
 		return
 	}

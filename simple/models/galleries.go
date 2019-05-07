@@ -1,6 +1,9 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+	"log"
+)
 
 type Gallery struct {
 	gorm.Model
@@ -102,7 +105,11 @@ func (gg *galleryGorm) ByID(id uint) (*Gallery, error) {
 }
 func (gg *galleryGorm) ByUserID(userID uint) ([]Gallery, error) {
 	var galleries []Gallery
-	gg.db.Where("user_id=?", userID).Find(&galleries)
+	err := gg.db.Where("user_id=?", userID).Find(&galleries).Error
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 	return galleries, nil
 }
 

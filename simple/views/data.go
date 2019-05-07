@@ -1,6 +1,9 @@
 package views
 
-import "webapp1/simple/models"
+import (
+	"log"
+	"webapp1/simple/models"
+)
 
 const (
 	AlertError   = "danger"
@@ -28,6 +31,7 @@ func (d *Data) SetAlert(err error) {
 			Message: pErr.Puclic(),
 		}
 	} else {
+		log.Println(err)
 		d.Alert = &Alert{
 			Level:   AlertError,
 			Message: ErrGeneric,

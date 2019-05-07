@@ -27,8 +27,11 @@ func main() {
 	defer services.Close()
 	services.AutoMigrate()
 
-	requreUserMw := middleware.RequireUser{
+	userMw := middleware.User{
 		UserService: services.User,
+	}
+	requreUserMw := middleware.RequireUser{
+		User: userMw,
 	}
 
 	r := mux.NewRouter()
@@ -42,7 +45,6 @@ func main() {
 	r.HandleFunc("/signup", usersC.Create).Methods("POST")
 	r.Handle("/login", usersC.LoginView).Methods("GET")
 	r.HandleFunc("/login", usersC.Login).Methods("POST")
-	r.HandleFunc("/cookietest", usersC.Cookietest).Methods("GET")
 
 	r.Handle("/galleries", requreUserMw.ApplyFn(galleriesC.Index)).Methods("GET")
 	r.Handle("/galleries/new", requreUserMw.Apply(galleriesC.New)).Methods("GET")
@@ -51,6 +53,7 @@ func main() {
 	r.HandleFunc("/galleries/{id:[0-9]+}/edit", requreUserMw.ApplyFn(galleriesC.Edit)).Methods("GET").Name("edit_gallery")
 	r.HandleFunc("/galleries/{id:[0-9]+}/update", requreUserMw.ApplyFn(galleriesC.Update)).Methods("POST")
 	r.HandleFunc("/galleries/{id:[0-9]+}/delete", requreUserMw.ApplyFn(galleriesC.Delete)).Methods("POST")
-	http.ListenAndServe(":3000", r)
+	r.HandleFunc("/galleries/{id:[0-9]+}/images", requreUserMw.ApplyFn(galleriesC.ImageUpload)).Methods("POST")
+	http.ListenAndServe(":3000", userMw.Apply(r))
 
 }

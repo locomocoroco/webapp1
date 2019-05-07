@@ -1,5 +1,7 @@
 package views
 
+import "webapp1/simple/models"
+
 const (
 	AlertError   = "danger"
 	AlertWarning = "warning"
@@ -15,6 +17,7 @@ type Alert struct {
 }
 type Data struct {
 	Alert *Alert
+	User  *models.Users
 	Yield interface{}
 }
 

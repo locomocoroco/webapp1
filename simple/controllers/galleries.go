@@ -3,13 +3,17 @@ package controllers
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"webapp1/simple/context"
 	"webapp1/simple/models"
 	"webapp1/simple/views"
 )
+
+const maxMultipartMem = 100 << 20
 
 func NewGalleries(gs models.GalleryService, r *mux.Router) *Galleries {
 	return &Galleries{
@@ -44,7 +48,7 @@ func (g *Galleries) Index(w http.ResponseWriter, r *http.Request) {
 	}
 	var vd views.Data
 	vd.Yield = galleries
-	g.IndexView.Render(w, vd)
+	g.IndexView.Render(w, r, vd)
 }
 func (g *Galleries) Show(w http.ResponseWriter, r *http.Request) {
 	gallery, err := g.galleryByID(w, r)
@@ -53,7 +57,7 @@ func (g *Galleries) Show(w http.ResponseWriter, r *http.Request) {
 	}
 	var vd views.Data
 	vd.Yield = gallery
-	g.ShowView.Render(w, vd)
+	g.ShowView.Render(w, r, vd)
 }
 func (g *Galleries) Edit(w http.ResponseWriter, r *http.Request) {
 	gallery, err := g.galleryByID(w, r)
@@ -67,7 +71,8 @@ func (g *Galleries) Edit(w http.ResponseWriter, r *http.Request) {
 	}
 	var vd views.Data
 	vd.Yield = gallery
-	g.EditView.Render(w, vd)
+	vd.User = user
+	g.EditView.Render(w, r, vd)
 }
 func (g *Galleries) Delete(w http.ResponseWriter, r *http.Request) {
 	gallery, err := g.galleryByID(w, r)
@@ -84,7 +89,7 @@ func (g *Galleries) Delete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		vd.SetAlert(err)
 		vd.Yield = gallery
-		g.EditView.Render(w, vd)
+		g.EditView.Render(w, r, vd)
 		return
 	}
 	http.Redirect(w, r, "galleries", http.StatusFound)
@@ -95,7 +100,7 @@ func (g *Galleries) Create(w http.ResponseWriter, r *http.Request) {
 	if err := parseForm(r, &form); err != nil {
 		log.Println(err)
 		vd.SetAlert(err)
-		g.New.Render(w, vd)
+		g.New.Render(w, r, vd)
 		return
 	}
 	user := context.User(r.Context())
@@ -110,7 +115,7 @@ func (g *Galleries) Create(w http.ResponseWriter, r *http.Request) {
 	if err := g.gs.Create(&gallery); err != nil {
 		log.Println(err)
 		vd.SetAlert(err)
-		g.New.Render(w, vd)
+		g.New.Render(w, r, vd)
 		return
 	}
 	url, err := g.r.Get("edit_gallery").URL("id", fmt.Sprintf("%v", gallery.ID))
@@ -131,7 +136,7 @@ func (g *Galleries) Update(w http.ResponseWriter, r *http.Request) {
 	if err := parseForm(r, &form); err != nil {
 		log.Println(err)
 		vd.SetAlert(err)
-		g.EditView.Render(w, vd)
+		g.EditView.Render(w, r, vd)
 		return
 	}
 	gallery.Title = form.Title
@@ -139,14 +144,14 @@ func (g *Galleries) Update(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 		vd.SetAlert(err)
-		g.EditView.Render(w, vd)
+		g.EditView.Render(w, r, vd)
 		return
 	}
 	vd.Alert = &views.Alert{
 		Level:   views.AlertSuccess,
 		Message: "Gallery successfully updated!",
 	}
-	g.EditView.Render(w, vd)
+	g.EditView.Render(w, r, vd)
 }
 func (g *Galleries) galleryByID(w http.ResponseWriter, r *http.Request) (*models.Gallery, error) {
 	vars := mux.Vars(r)
@@ -168,4 +173,55 @@ func (g *Galleries) galleryByID(w http.ResponseWriter, r *http.Request) (*models
 		return nil, err
 	}
 	return gallery, nil
+}
+func (g *Galleries) ImageUpload(w http.ResponseWriter, r *http.Request) {
+	gallery, err := g.galleryByID(w, r)
+	if err != nil {
+		return
+	}
+	user := context.User(r.Context())
+	if gallery.UserID != user.ID {
+		http.Error(w, "Gallery not found", http.StatusNotFound)
+		return
+	}
+	var vd views.Data
+	vd.Yield = gallery
+	err = r.ParseMultipartForm(maxMultipartMem)
+	if err != nil {
+		vd.SetAlert(err)
+		g.EditView.Render(w, r, vd)
+		return
+	}
+	galleryPath := fmt.Sprintf("images/galleries/%v/", gallery.ID)
+	err = os.MkdirAll(galleryPath, 0755)
+	if err != nil {
+		vd.SetAlert(err)
+		g.EditView.Render(w, r, vd)
+		return
+	}
+	files := r.MultipartForm.File["images"]
+	for _, f := range files {
+		file, err := f.Open()
+		if err != nil {
+			vd.SetAlert(err)
+			g.EditView.Render(w, r, vd)
+			return
+		}
+		defer file.Close()
+
+		dst, err := os.Create(galleryPath + f.Filename)
+		if err != nil {
+			vd.SetAlert(err)
+			g.EditView.Render(w, r, vd)
+			return
+		}
+		defer dst.Close()
+		_, err = io.Copy(dst, file)
+		if err != nil {
+			vd.SetAlert(err)
+			g.EditView.Render(w, r, vd)
+			return
+		}
+
+	}
 }

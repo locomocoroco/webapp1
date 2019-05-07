@@ -1,6 +1,6 @@
 {{define "yield"}}
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-10 col-md-offset-1">
         <div class="card">
             <div class="card-header bg-primary">
                 <h2>Edit your Gallery</h2>
@@ -12,7 +12,19 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="card">
+            <div class="card-header bg-primary">
+                <h2>Upload Corner</h2>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{template "imageUploadForm" .}}</p>
 
+            </div>
+        </div>
+    </div>
+</div>
 {{end}}
 
 {{define "editGalleryForm"}}
@@ -32,4 +44,18 @@
     <button type="submit" class="btn btn-danger">Delete</button>
 </form>
 
+{{end}}
+
+{{define "imageUploadForm"}}
+<form action="/galleries/{{.ID}}/images" method="POST" enctype="multipart/form-data">
+<div class="input-group mb-3">
+    <div class="custom-file">
+        <input type="file" multiple="multiple" id="images" name="images" class="custom-file-input" >
+        <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
+    </div>
+    <div class="input-group-append">
+        <span class="input-group-text" id="inputGroupFileAddon02">Upload</span>
+    </div>
+</div>
+</form>
 {{end}}

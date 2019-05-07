@@ -4,9 +4,24 @@
         <h1>
             {{.Title}}
         </h1>
-        <pre>
-            {{.}}
-        </pre>
+       <hr>
     </div>
 </div>
-        {{end}}
+<div class="row">
+    {{range .ImagesSplitN 3}}
+       <div class="col-md-5">
+          {{range .}}
+           <a href="{{.}}">
+           <img src="{{.}}" class="thumbnail">
+          </a>
+          {{end}}
+       </div>
+    {{end}}
+</div>
+<style>
+    .thumbnail {
+        width: 100%;
+    }
+</style>
+
+{{end}}

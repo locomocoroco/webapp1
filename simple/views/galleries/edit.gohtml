@@ -4,6 +4,9 @@
         <div class="card">
             <div class="card-header bg-primary">
                 <h2>Edit your Gallery</h2>
+                <a href="/galleries/{{.ID}}">
+                    View this gallery
+                </a>
             </div>
             <div class="card-body">
                 <p class="card-text">{{template "editGalleryForm" .}}</p>
@@ -57,5 +60,25 @@
         <span class="input-group-text" id="inputGroupFileAddon02">Upload</span>
     </div>
 </div>
+<div class="col-md-12">
+    {{template "galleryImages"}}
+</div>
 </form>
 {{end}}
+
+ {{define "galleryImages"}}
+    {{range .ImagesSplitN 6}}
+        <div class="col-md-2">
+          {{range .}}
+            <a href="{{.}}">
+                <img src="{{.}}" class="thumbnail">
+            </a>
+        {{end}}
+        </div>
+    {{end}}
+    <style>
+        .thumbnail {
+            width: 100%;
+        }
+    </style>
+ {{end}}

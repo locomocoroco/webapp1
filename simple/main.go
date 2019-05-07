@@ -35,7 +35,7 @@ func main() {
 	}
 
 	r := mux.NewRouter()
-	galleriesC := controllers.NewGalleries(services.Gallery, r)
+	galleriesC := controllers.NewGalleries(services.Gallery, services.Image, r)
 	usersC := controllers.NewUsers(services.User)
 	staticC := controllers.NewStatic()
 

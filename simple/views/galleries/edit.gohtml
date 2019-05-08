@@ -32,6 +32,7 @@
 
 {{define "editGalleryForm"}}
 <form action="/galleries/{{.ID}}/update" method="POST">
+    {{csrfField}}
     <div class="form-group">
         <label for="title">Title</label>
         <input type="text" name="title" class="form-control" id="title"
@@ -44,6 +45,7 @@
     <button type="submit" class="btn btn-primary">Update</button>
 </form>
 <form action="/galleries/{{.ID}}/delete" method="POST">
+    {{csrfField}}
     <button type="submit" class="btn btn-danger">Delete</button>
 </form>
 
@@ -51,7 +53,8 @@
 
 {{define "imageUploadForm"}}
 <form action="/galleries/{{.ID}}/images" method="POST" enctype="multipart/form-data">
-<div class="input-group mb-3">
+{{csrfField}}
+    <div class="input-group mb-3">
     <div class="custom-file">
         <input type="file" multiple="multiple" id="images" name="images" class="custom-file-input" >
         <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
@@ -82,6 +85,7 @@
 
 {{define "deleteImageForm"}}
 <form action="/galleries/{{.GalleryID}}/images/{{.Filename}}/delete" method="POST">
+   {{csrfField}}
     <button type="submit" class="btn btn-danger">Delete</button>
 </form>
         {{end}}

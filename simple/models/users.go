@@ -2,16 +2,13 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+
 	"golang.org/x/crypto/bcrypt"
 	"regexp"
 	"strings"
 	"webapp1/simple/hash"
 	"webapp1/simple/rand"
 )
-
-const userPepperPw = "4jhjj767o1ngl6dq"
-const hmacSecretKey = "5gfl7lhl76lle7gh"
 
 type UserDB interface {
 	ByID(id uint) (*Users, error)
@@ -67,7 +64,7 @@ func (us *userService) Auth(email, password string) (*Users, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(foundUser.PasswordHash), []byte(password+userPepperPw))
+	err = bcrypt.CompareHashAndPassword([]byte(foundUser.PasswordHash), []byte(password+us.pepper))
 	if err != nil {
 		switch err {
 		case bcrypt.ErrMismatchedHashAndPassword:
@@ -98,17 +95,19 @@ func (ug *userGorm) Delete(id uint) error {
 }
 
 //NewUserService
-func NewUserService(db *gorm.DB) UserService {
+func newUserService(db *gorm.DB, hmacSecretKey, pepper string) UserService {
 	ug := &userGorm{db}
 	hmac := hash.NewHMAC(hmacSecretKey)
 	uv := &userValidator{
 		hmac:   hmac,
 		UserDB: ug,
+		pepper: pepper,
 	}
 	return &userService{
 		UserDB: &userValidator{
 			UserDB: uv,
 		},
+		pepper: pepper,
 	}
 }
 
@@ -116,13 +115,15 @@ var _ UserService = &userService{}
 
 type userService struct {
 	UserDB
+	pepper string
 }
 
 var _ UserDB = &userValidator{}
 
 type userValidator struct {
 	UserDB
-	hmac hash.HMAC
+	hmac   hash.HMAC
+	pepper string
 }
 
 func (uv *userValidator) ByEmail(email string) (*Users, error) {
@@ -178,7 +179,7 @@ func (uv *userValidator) bcryptPassword(user *Users) error {
 	if user.Password == "" {
 		return nil
 	}
-	pwBytes := []byte(user.Password + userPepperPw)
+	pwBytes := []byte(user.Password + uv.pepper)
 	passwordHash, err := bcrypt.GenerateFromPassword(pwBytes, bcrypt.DefaultCost)
 	if err != nil {
 		return err

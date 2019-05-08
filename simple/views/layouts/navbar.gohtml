@@ -19,13 +19,24 @@
                 {{end}}
             </ul>
           <ul class="nav navbar-nav navbar-right">
-            {{if User == null}}
-              <li><a href="/login">Login</a></li>
-              <li><a href="/signup">Signup</a></li>
+            {{if .User}}
+                <li>{{template "logoutForm"}}</li>
+                {{else}}
+                <li><a href="/login">Login</a></li>
+                <li><a href="/signup">Signup</a></li>
             {{end}}
           </ul>
         </div>
     </div>
 </nav>
 
+{{end}}
+
+{{define "logoutForm"}}
+<form class="navbar-form navbar-right" action="/logout" method="POST">
+    {{csrfField}}
+    <button type="submit" class="btn btn-primary">
+        Logout
+    </button>
+</form>
 {{end}}

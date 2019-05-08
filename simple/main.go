@@ -48,6 +48,7 @@ func main() {
 	r.HandleFunc("/signup", usersC.Create).Methods("POST")
 	r.Handle("/login", usersC.LoginView).Methods("GET")
 	r.HandleFunc("/login", usersC.Login).Methods("POST")
+	r.HandleFunc("/logout", requreUserMw.ApplyFn(usersC.Logout)).Methods("POST")
 
 	b, err := rand.Bytes(32)
 	if err != nil {

@@ -3,6 +3,8 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"time"
+	"webapp1/simple/context"
 	"webapp1/simple/models"
 	"webapp1/simple/rand"
 	"webapp1/simple/views"
@@ -93,6 +95,21 @@ func (u *Users) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/galleries", http.StatusFound)
+}
+func (u *Users) Logout(w http.ResponseWriter, r *http.Request) {
+	cookie := http.Cookie{
+		Name:     "remember_token",
+		Value:    "",
+		Expires:  time.Now(),
+		HttpOnly: true,
+	}
+	http.SetCookie(w, &cookie)
+
+	user := context.User(r.Context())
+	token, _ := rand.RememberToken()
+	user.Remember = token
+	u.us.Update(user)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 func (u *Users) signIn(w http.ResponseWriter, user *models.Users) error {
 	if user.Remember == "" {

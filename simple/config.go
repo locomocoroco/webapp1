@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 )
 
 type PostfresConfig struct {
@@ -30,10 +32,11 @@ func DefaultPostgresConfig() PostfresConfig {
 }
 
 type ConfigV struct {
-	Port    int    `json:"port"`
-	Env     string `json:"env"`
-	Pepper  string `json:"pepper"`
-	HMACKey string `json:"hmac_key"`
+	Port     int            `json:"port"`
+	Env      string         `json:"env"`
+	Pepper   string         `json:"pepper"`
+	HMACKey  string         `json:"hmac_key"`
+	Database PostfresConfig `json:"database"`
 }
 
 func (c ConfigV) IsProd() bool {
@@ -41,11 +44,30 @@ func (c ConfigV) IsProd() bool {
 }
 func DefaultConfig() ConfigV {
 	return ConfigV{
-		Port:    3000,
-		Env:     "dev",
-		Pepper:  "4jhjj767o1ngl6dq",
-		HMACKey: "5gfl7lhl76lle7gh",
+		Port:     3000,
+		Env:      "dev",
+		Pepper:   "4jhjj767o1ngl6dq",
+		HMACKey:  "5gfl7lhl76lle7gh",
+		Database: DefaultPostgresConfig(),
 	}
+}
+func LoadConfig(prod bool) ConfigV {
+	f, err := os.Open(".config")
+	if err != nil {
+		if prod {
+			panic(err)
+		}
+		fmt.Println("using default config")
+		return DefaultConfig()
+	}
+	var c ConfigV
+	dec := json.NewDecoder(f)
+	err = dec.Decode(&c)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("loaded passed config")
+	return c
 }
 
 //db, err := gorm.Open("postgres", connectionInfo)

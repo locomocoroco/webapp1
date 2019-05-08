@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
@@ -12,8 +13,11 @@ import (
 )
 
 func main() {
-	cfg := DefaultConfig()
-	dbCfg := DefaultPostgresConfig()
+	boolPtr := flag.Bool("prod", false, "set true in prod."+
+		"provide a .config file.")
+
+	cfg := LoadConfig(*boolPtr)
+	dbCfg := cfg.Database
 	services, err := models.NewServices(models.WithGorm(dbCfg.Dialect(), dbCfg.ConnectionInfo()),
 		models.WithLog(!cfg.IsProd()),
 		models.WithUser(cfg.Pepper, cfg.HMACKey),

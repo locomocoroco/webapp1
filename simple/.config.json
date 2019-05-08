@@ -1,0 +1,13 @@
+{
+  "port":3000,
+  "env":"dev",
+  "pepper":"4jhjj767o1ngl6dq",
+  "hmac_key":"5gfl7lhl76lle7gh",
+  "database": {
+    "host":"localhost",
+    "port":3000,
+    "user":"postgres",
+    "password":"dbpass",
+    "name":"simpleapes_dev"
+  }
+}

@@ -2,6 +2,8 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+	"log"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 	"regexp"
@@ -21,6 +23,8 @@ type UserDB interface {
 }
 type UserService interface {
 	Auth(email, password string) (*Users, error)
+	InitiateReset(userID uint) (string, error)
+	//CompleteReset
 	UserDB
 }
 
@@ -75,7 +79,37 @@ func (us *userService) Auth(email, password string) (*Users, error) {
 	}
 	return foundUser, nil
 }
-
+func (us *userService) InitiateReset(userID uint) (string, error) {
+	pwr := pwReset{UserID: userID}
+	if err := us.pwResetDB.Create(&pwr); err != nil {
+		return "", nil
+	}
+	return pwr.Token, nil
+}
+func (us *userService) CompleteReset(token, newPw string) (*Users, error) {
+	pwr, err := us.pwResetDB.ByToken(token)
+	if err != nil {
+		if err == ErrNotFound {
+			return nil, ErrTokenInvalid
+		}
+	}
+	if time.Now().Sub(pwr.CreatedAt) > (6 * time.Hour) {
+		return nil, ErrTokenInvalid
+	}
+	user, err := us.ByID(pwr.ID)
+	if err != nil {
+		return nil, err
+	}
+	err = us.Update(user)
+	if err != nil {
+		return nil, err
+	}
+	err = us.pwResetDB.Delete(pwr.ID)
+	if err != nil {
+		log.Println(err)
+	}
+	return user, nil
+}
 func first(db *gorm.DB, dst interface{}) error {
 	err := db.First(dst).Error
 	if err == gorm.ErrRecordNotFound {
@@ -107,7 +141,8 @@ func newUserService(db *gorm.DB, hmacSecretKey, pepper string) UserService {
 		UserDB: &userValidator{
 			UserDB: uv,
 		},
-		pepper: pepper,
+		pepper:    pepper,
+		pwResetDB: newPwResetValidator(&pwResetGorm{db}, hmac),
 	}
 }
 
@@ -115,7 +150,8 @@ var _ UserService = &userService{}
 
 type userService struct {
 	UserDB
-	pepper string
+	pepper    string
+	pwResetDB pwResetDB
 }
 
 var _ UserDB = &userValidator{}

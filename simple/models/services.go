@@ -60,13 +60,13 @@ type Services struct {
 
 //Closes db conn
 func (s *Services) DestructiveReset() error {
-	if err := s.db.DropTableIfExists(&Users{}, &Gallery{}).Error; err != nil {
+	if err := s.db.DropTableIfExists(&Users{}, &Gallery{}, &pwReset{}).Error; err != nil {
 		return err
 	}
 	return s.AutoMigrate()
 }
 func (s *Services) AutoMigrate() error {
-	return s.db.AutoMigrate(&Users{}, &Gallery{}).Error
+	return s.db.AutoMigrate(&Users{}, &Gallery{}, &pwReset{}).Error
 
 }
 func (s *Services) Close() error {

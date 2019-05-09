@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"webapp1/simple/controllers"
+	"webapp1/simple/email"
 	"webapp1/simple/middleware"
 	"webapp1/simple/models"
 	"webapp1/simple/rand"
@@ -37,9 +38,13 @@ func main() {
 		User: userMw,
 	}
 
+	mgCf := cfg.Mailgun
+	emailer := email.NewClient(email.WithSender("", ""))
+	email.WithMailgun(mgCf.Domain, mgCf.APIKey)
+
 	r := mux.NewRouter()
 	galleriesC := controllers.NewGalleries(services.Gallery, services.Image, r)
-	usersC := controllers.NewUsers(services.User)
+	usersC := controllers.NewUsers(services.User, emailer)
 	staticC := controllers.NewStatic()
 
 	r.Handle("/", staticC.HomeView).Methods("GET")

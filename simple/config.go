@@ -37,6 +37,7 @@ type ConfigV struct {
 	Pepper   string         `json:"pepper"`
 	HMACKey  string         `json:"hmac_key"`
 	Database PostfresConfig `json:"database"`
+	Mailgun  MailgunConfig  `json:"mailgun"`
 }
 
 func (c ConfigV) IsProd() bool {
@@ -51,6 +52,13 @@ func DefaultConfig() ConfigV {
 		Database: DefaultPostgresConfig(),
 	}
 }
+
+type MailgunConfig struct {
+	APIKey       string `json:"api_key"`
+	PublicAPIKEY string `json:"public_api_key"`
+	Domain       string `json:"domain"`
+}
+
 func LoadConfig(prod bool) ConfigV {
 	f, err := os.Open(".config")
 	if err != nil {

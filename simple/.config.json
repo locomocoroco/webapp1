@@ -9,5 +9,10 @@
     "user":"postgres",
     "password":"dbpass",
     "name":"simpleapes_dev"
+  },
+  "mailgun": {
+    "api_key":"",
+    "public_api_key":"",
+    "domain":""
   }
 }

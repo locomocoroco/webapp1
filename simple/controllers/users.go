@@ -5,16 +5,18 @@ import (
 	"net/http"
 	"time"
 	"webapp1/simple/context"
+	"webapp1/simple/email"
 	"webapp1/simple/models"
 	"webapp1/simple/rand"
 	"webapp1/simple/views"
 )
 
-func NewUsers(us models.UserService) *Users {
+func NewUsers(us models.UserService, emailer *email.Client) *Users {
 	return &Users{
 		NewView:   views.NewView("bootstrap", "users/new"),
 		LoginView: views.NewView("bootstrap", "users/login"),
 		us:        us,
+		emailer:   emailer,
 	}
 }
 
@@ -22,10 +24,13 @@ type Users struct {
 	NewView   *views.View
 	LoginView *views.View
 	us        models.UserService
+	emailer   *email.Client
 }
 
 func (u *Users) New(w http.ResponseWriter, r *http.Request) {
-	u.NewView.Render(w, r, nil)
+	var form NewForm
+	parseURLParams(r, &form)
+	u.NewView.Render(w, r, form)
 }
 
 type NewForm struct {
@@ -37,6 +42,7 @@ type NewForm struct {
 func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 	var vd views.Data
 	var form NewForm
+	vd.Yield = &form
 	if err := parseForm(r, &form); err != nil {
 		vd.SetAlert(err)
 		u.NewView.Render(w, r, vd)
@@ -53,6 +59,7 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 		u.NewView.Render(w, r, vd)
 		return
 	}
+	u.emailer.Welcome(user.Name, user.Email) //err check?
 	err := u.signIn(w, &user)
 	if err != nil {
 		log.Println(err)

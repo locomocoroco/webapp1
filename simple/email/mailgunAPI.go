@@ -4,10 +4,13 @@ import (
 	"context"
 	"fmt"
 	"github.com/mailgun/mailgun-go"
+	"net/url"
 	"time"
 )
 
 const welcomeHTML = `<a href="support@simpleapes.com"">Click here for help</a>`
+const resetBaseUrl = ""
+const resetHTML = `password reset link %s token %s`
 
 type Client struct {
 	from string
@@ -23,7 +26,19 @@ func (c *Client) Welcome(toName, toEmail string) error {
 	_, _, err := c.mg.Send(ctx, message)
 	return err
 }
+func (c *Client) ResetPw(toEmail, token string) error {
+	v := url.Values{}
+	v.Set("token", token)
+	resetUrl := resetBaseUrl + "?" + v.Encode()
+	resettpl := fmt.Sprintf(resetHTML, resetUrl, token)
+	message := c.mg.NewMessage(c.from, "Instructions for resetting Password", resettpl, toEmail)
+	message.SetHtml(resettpl)
 
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	_, _, err := c.mg.Send(ctx, message)
+	return err
+}
 func WithMailgun(domain, apiKey string) ClientConfig {
 	return func(c *Client) {
 		mg := mailgun.NewMailgun(domain, apiKey)

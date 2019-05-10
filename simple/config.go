@@ -38,6 +38,7 @@ type ConfigV struct {
 	HMACKey  string         `json:"hmac_key"`
 	Database PostfresConfig `json:"database"`
 	Mailgun  MailgunConfig  `json:"mailgun"`
+	Dropbox  OAuthConfig    `json:"dropbox"`
 }
 
 func (c ConfigV) IsProd() bool {
@@ -58,6 +59,12 @@ type MailgunConfig struct {
 	PublicAPIKEY string `json:"public_api_key"`
 	Domain       string `json:"domain"`
 }
+type OAuthConfig struct {
+	id       string `json:"id"`
+	sercret  string `json:"sercret"`
+	authUrl  string `json:"auth_url"`
+	tokenUrl string `json:"token_url"`
+}
 
 func LoadConfig(prod bool) ConfigV {
 	f, err := os.Open(".config")
@@ -77,9 +84,3 @@ func LoadConfig(prod bool) ConfigV {
 	fmt.Println("loaded passed config")
 	return c
 }
-
-//db, err := gorm.Open("postgres", connectionInfo)
-//if err != nil {
-//return nil, err
-//}
-//db.LogMode(true)

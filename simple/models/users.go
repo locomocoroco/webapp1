@@ -24,7 +24,7 @@ type UserDB interface {
 type UserService interface {
 	Auth(email, password string) (*Users, error)
 	InitiateReset(userID uint) (string, error)
-	//CompleteReset
+	CompleteReset(token, newPw string) (*Users, error)
 	UserDB
 }
 

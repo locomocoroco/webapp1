@@ -1,11 +1,15 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
+	"golang.org/x/oauth2"
 	"net/http"
+	"time"
+	llctx "webapp1/simple/context"
 	"webapp1/simple/controllers"
 	"webapp1/simple/email"
 	"webapp1/simple/middleware"
@@ -24,6 +28,7 @@ func main() {
 		models.WithUser(cfg.Pepper, cfg.HMACKey),
 		models.WithGallery(),
 		models.WithImage(),
+		models.WithOAuth(),
 	)
 	if err != nil {
 		panic(err)
@@ -46,6 +51,75 @@ func main() {
 	galleriesC := controllers.NewGalleries(services.Gallery, services.Image, r)
 	usersC := controllers.NewUsers(services.User, emailer)
 	staticC := controllers.NewStatic()
+
+	dbxOAuth := &oauth2.Config{
+		ClientID:     cfg.Dropbox.id,
+		ClientSecret: cfg.Dropbox.sercret,
+		Endpoint: oauth2.Endpoint{
+			TokenURL: cfg.Dropbox.tokenUrl,
+			AuthURL:  cfg.Dropbox.authUrl,
+		},
+		RedirectURL: "http://localhost:3000/dbx/callback",
+	}
+	dbxRe := func(w http.ResponseWriter, r *http.Request) {
+		state := csrf.Token(r)
+		cookie := http.Cookie{
+			Name:     "oauth_state",
+			Value:    state,
+			HttpOnly: true,
+			Expires:  time.Now().Add(5 * time.Minute),
+		}
+		http.SetCookie(w, &cookie)
+		url := dbxOAuth.AuthCodeURL(state)
+		http.Redirect(w, r, url, http.StatusFound)
+	}
+	r.HandleFunc("/oauth/dbx/connect", requreUserMw.ApplyFn(dbxRe))
+	dbxCallb := func(w http.ResponseWriter, r *http.Request) {
+
+		r.ParseForm()
+		state := r.FormValue("state")
+		cookie, err := r.Cookie("oauth_state")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if cookie == nil || cookie.Value != state {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		cookie.Value = ""
+		cookie.Expires = time.Now()
+
+		code := r.FormValue("code")
+		token, err := dbxOAuth.Exchange(context.TODO(), code)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		user := llctx.User(r.Context())
+		existin, err := services.OAuth.Find(user.ID, models.OAtuhDropbox)
+		if err == models.ErrNotFound {
+
+		} else if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			services.OAuth.Delete(existin.ID)
+		}
+		oauthU := models.OAuth{
+			UserID:  user.ID,
+			Token:   *token,
+			Service: models.OAtuhDropbox,
+		}
+		err = services.OAuth.Create(&oauthU)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		fmt.Fprintf(w, "%+v", token)
+		fmt.Fprint(w, r.FormValue("code"), r.FormValue("state"))
+	}
+	r.HandleFunc("/oauth/dbx/callback", requreUserMw.ApplyFn(dbxCallb))
 
 	r.Handle("/", staticC.HomeView).Methods("GET")
 	r.Handle("/contact", staticC.ContactView).Methods("GET")

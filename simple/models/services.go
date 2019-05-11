@@ -41,6 +41,12 @@ func WithLog(mode bool) ServicesConfig {
 		return nil
 	}
 }
+func WithOAuth() ServicesConfig {
+	return func(s *Services) error {
+		s.OAuth = NewOAuthService(s.db)
+		return nil
+	}
+}
 func NewServices(cfgs ...ServicesConfig) (*Services, error) {
 	var s Services
 	for _, cfg := range cfgs {
@@ -55,18 +61,19 @@ type Services struct {
 	Gallery GalleryService
 	User    UserService
 	Image   ImageService
+	OAuth   OAuthService
 	db      *gorm.DB
 }
 
 //Closes db conn
 func (s *Services) DestructiveReset() error {
-	if err := s.db.DropTableIfExists(&Users{}, &Gallery{}, &pwReset{}).Error; err != nil {
+	if err := s.db.DropTableIfExists(&Users{}, &Gallery{}, &pwReset{}, OAuth{}).Error; err != nil {
 		return err
 	}
 	return s.AutoMigrate()
 }
 func (s *Services) AutoMigrate() error {
-	return s.db.AutoMigrate(&Users{}, &Gallery{}, &pwReset{}).Error
+	return s.db.AutoMigrate(&Users{}, &Gallery{}, &pwReset{}, OAuth{}).Error
 
 }
 func (s *Services) Close() error {
